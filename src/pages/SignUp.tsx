@@ -1,12 +1,15 @@
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import { string, ref, object } from 'yup';
+import { useSignUpMutation } from '../queries/useSignUpMutation';
 
 export default function SignUp() {
   const passwordFormatLabel =
     'Your password must contain at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 digit and 1 special character';
   const passwordRules =
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+]).{8,}$/;
+
+  const { mutate } = useSignUpMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -26,7 +29,10 @@ export default function SignUp() {
         .required('Required'),
     }),
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2));
+      mutate({
+        email: values.email,
+        password: values.password,
+      });
     },
   });
 
