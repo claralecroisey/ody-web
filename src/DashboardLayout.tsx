@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import NavBar from './components/NavBar';
-import RequireAuth from 'react-auth-kit/PrivateRoute';
+import { RequireAuth } from 'react-auth-kit';
 
 export const DashboardLayout = () => {
   return (

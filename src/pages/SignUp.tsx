@@ -1,7 +1,8 @@
 import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { string, ref, object } from 'yup';
 import { useSignUpMutation } from '../queries/useSignUpMutation';
+import { useState } from 'react';
 
 export default function SignUp() {
   const passwordFormatLabel =
@@ -9,7 +10,10 @@ export default function SignUp() {
   const passwordRules =
     /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+]).{8,}$/;
 
+  const [error, setError] = useState<string | null>(null);
+
   const { mutate } = useSignUpMutation();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -29,10 +33,19 @@ export default function SignUp() {
         .required('Required'),
     }),
     onSubmit: values => {
-      mutate({
-        email: values.email,
-        password: values.password,
-      });
+      mutate(
+        {
+          email: values.email,
+          password: values.password,
+        },
+        {
+          onSuccess: () => navigate('/login'),
+          onError: () =>
+            setError(
+              'Something went wrong while signing up, please try again later.',
+            ),
+        },
+      );
     },
   });
 
@@ -63,6 +76,7 @@ export default function SignUp() {
             <input
               type="password"
               name="password"
+              autoComplete="on"
               placeholder="************"
               className="input input-bordered w-full"
               onChange={formik.handleChange}
@@ -77,6 +91,7 @@ export default function SignUp() {
             <input
               type="password"
               name="passwordConfirmation"
+              autoComplete="on"
               placeholder="************"
               className="input input-bordered w-full"
               onChange={formik.handleChange}
@@ -93,6 +108,7 @@ export default function SignUp() {
             Sign up
           </button>
         </form>
+        <label className="label mt-4 text-sm text-red-600">{error}</label>
         <span className="mt-6 text-sm">
           Already have an account?{' '}
           <Link className="link mt-8" to="/login">

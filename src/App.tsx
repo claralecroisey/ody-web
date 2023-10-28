@@ -24,6 +24,7 @@ function App() {
           <Route path="" element={<Home />}></Route>
           <Route path="tasks" element={<Tasks />}></Route>
           <Route path="settings" element={<Settings />} />
+          <Route path="*" element={<Navigate to="" />} />
         </Route>
       </Routes>
     </QueryClientProvider>
