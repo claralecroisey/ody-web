@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { ComponentType } from 'react';
 import { NavLink } from 'react-router-dom';
+import { SignOutButton } from './SignOutButton';
 
 interface NavbarLink {
   path: string;
@@ -17,6 +18,7 @@ function NavbarLink({ path, IconComponent, children }: NavbarLink) {
   return (
     <NavLink
       to={path}
+      end
       className={({ isActive }) =>
         `flex items-center rounded-md p-[8px] font-semibold transition duration-300 ease-in-out hover:bg-indigo-700 hover:text-white ${
           isActive ? 'bg-indigo-700 text-white' : ''
@@ -37,19 +39,28 @@ export default function NavBar() {
         <div className="flex h-full flex-1 flex-col justify-between">
           <ul className="flex flex-col space-y-2">
             <li>
-              <NavbarLink path="/" IconComponent={HomeIcon}>
+              <NavbarLink path="/dashboard" IconComponent={HomeIcon}>
                 Home
               </NavbarLink>
             </li>
             <li>
-              <NavbarLink path="/tasks" IconComponent={Squares2X2Icon}>
+              <NavbarLink
+                path="/dashboard/tasks"
+                IconComponent={Squares2X2Icon}
+              >
                 Tasks
               </NavbarLink>
             </li>
           </ul>
-          <NavbarLink path="/settings" IconComponent={Cog8ToothIcon}>
-            Settings
-          </NavbarLink>
+          <div className="flex flex-col space-y-2">
+            <NavbarLink
+              path="/dashboard/settings"
+              IconComponent={Cog8ToothIcon}
+            >
+              Settings
+            </NavbarLink>
+            <SignOutButton />
+          </div>
         </div>
       </nav>
     </aside>

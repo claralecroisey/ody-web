@@ -21,7 +21,7 @@ function App() {
         </Route>
 
         <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route path="" element={<Home />}></Route>
+          <Route index element={<Home />}></Route>
           <Route path="tasks" element={<Tasks />}></Route>
           <Route path="settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="" />} />
