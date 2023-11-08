@@ -11,7 +11,7 @@ function ProjectLine({ project }: { project: Project }) {
         {project.tasks.map(({ id, title, description, status, priority }) => (
           <div
             key={id}
-            className="card card-compact card-bordered w-full border-4"
+            className="card card-bordered card-compact w-full border-4"
           >
             <div className="card-body">
               <h3 className="flex justify-between text-base font-semibold">

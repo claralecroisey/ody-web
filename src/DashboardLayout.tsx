@@ -1,16 +1,16 @@
 import { Outlet } from 'react-router-dom';
 import NavBar from './components/NavBar';
-import { RequireAuth } from 'react-auth-kit';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
 
-export const DashboardLayout = () => {
+export const DashboardLayout = withAuthenticationRequired(() => {
   return (
-    <RequireAuth loginPath={'/login'}>
+    <>
       <div className="flex">
         <NavBar />
         <div className="container m-8 w-full">
           <Outlet />
         </div>
       </div>
-    </RequireAuth>
+    </>
   );
-};
+});
