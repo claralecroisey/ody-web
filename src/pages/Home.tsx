@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 
 export default function Home() {
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, user } = useAuth0();
 
   useEffect(() => {
     async function fetchData() {
@@ -26,13 +26,11 @@ export default function Home() {
     fetchData();
   }, [getAccessTokenSilently]);
 
-  const userData = {
-    firstName: 'Jane',
-  };
-
   return (
     <div className="container">
-      <h1 className="text-2xl font-medium">Hello {userData.firstName} 👋</h1>
+      <h1 className="text-2xl font-medium">
+        Welcome back {user?.given_name} 👋
+      </h1>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { AuthLayout } from './AuthLayout';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Landing from './pages/Landing';
 import { Callback } from './pages/Callback';
+import { AddJob } from './pages/AddJob';
 
 const queryClient = new QueryClient();
 
@@ -22,7 +23,10 @@ function App() {
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Home />}></Route>
           <Route path="callback" element={<Callback />} />
-          <Route path="board" element={<Board />}></Route>
+          <Route path="board">
+            <Route index element={<Board />} />
+            <Route path="new" element={<AddJob />} />
+          </Route>
           <Route path="settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="" />} />
         </Route>

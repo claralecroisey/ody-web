@@ -7,7 +7,7 @@ export const DashboardLayout = withAuthenticationRequired(() => {
     <>
       <div className="flex">
         <NavBar />
-        <div className="container m-8 w-full">
+        <div className="container m-8 w-full overflow-y-auto">
           <Outlet />
         </div>
       </div>

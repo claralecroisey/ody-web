@@ -33,7 +33,7 @@ function NavbarLink({ path, IconComponent, children }: NavbarLink) {
 
 export default function NavBar() {
   return (
-    <aside className="z-10 h-screen w-72 bg-indigo-600 px-4 py-6 text-indigo-200">
+    <aside className="sticky top-0 z-10 h-screen w-72 bg-indigo-600 px-4 py-6 text-indigo-200">
       <nav className="flex h-full flex-col">
         <BoltIcon className="mb-8 h-6 w-6" />
         <div className="flex h-full flex-1 flex-col justify-between">
