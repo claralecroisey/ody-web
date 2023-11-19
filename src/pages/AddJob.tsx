@@ -1,15 +1,25 @@
 import { Field, Formik } from 'formik';
 import { EditableContent } from '../components/form/EditableContent';
 import * as Yup from 'yup';
+import {
+  CreateJobListingData,
+  useCreateJobListingMutation,
+} from '../queries/useCreateJobListing';
+import { toSnakeCase } from '../utils/helpers';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const AddJobSchema = Yup.object().shape({
   title: Yup.string().required('Required'),
   role: Yup.string().required('Required'),
+  companyName: Yup.string().required('Required'),
   description: Yup.string().required('Required'),
   url: Yup.string().required('Required'),
 });
 
 export function AddJob() {
+  const { getAccessTokenSilently } = useAuth0();
+  const { mutate: createJobListing } = useCreateJobListingMutation();
+
   return (
     <div className="container flex h-full flex-col">
       <h1 className="mb-12 text-2xl font-semibold">Add a new Job listing</h1>
@@ -17,17 +27,25 @@ export function AddJob() {
         initialValues={{
           title: '',
           role: '',
+          companyName: '',
           description: '',
-          companyId: '',
           url: '',
         }}
         validationSchema={AddJobSchema}
-        onSubmit={(values, { setSubmitting }) => {
-          console.log(JSON.stringify(values, null, 2));
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+        onSubmit={async values => {
+          // TODO: move this in a separate logic
+          const token = await getAccessTokenSilently();
+          const config = {
+            headers: {
+              'content-type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+          };
+
+          createJobListing({
+            data: toSnakeCase(values) as CreateJobListingData,
+            config,
+          });
         }}
       >
         {({
@@ -47,7 +65,7 @@ export function AddJob() {
               <label htmlFor="title">Title</label>
               <input
                 type="text"
-                placeholder="Web Software Engineer"
+                placeholder="Software Engineer"
                 className="input input-bordered w-full"
                 name="title"
                 onChange={handleChange}
@@ -60,7 +78,7 @@ export function AddJob() {
 
               <label htmlFor="role">Role</label>
               <Field as="select" name="role" className="select select-bordered">
-                <option>Select a role</option>
+                <option value="">Select a role</option>
                 <option>Fullstack Engineer</option>
                 <option>Frontend Engineer</option>
                 <option>Backend Engineer</option>
@@ -68,6 +86,22 @@ export function AddJob() {
               </Field>
               <span className="text-sm text-error">
                 {errors.role && touched.role && errors.role}
+              </span>
+
+              <label htmlFor="title">Company Name</label>
+              <input
+                type="text"
+                placeholder="Company"
+                className="input input-bordered w-full"
+                name="companyName"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.companyName}
+              />
+              <span className="text-sm text-error">
+                {errors.companyName &&
+                  touched.companyName &&
+                  errors.companyName}
               </span>
 
               <label htmlFor="description">Description</label>
