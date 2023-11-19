@@ -1,7 +1,7 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Outlet } from 'react-router-dom';
 
-export const AuthLayout = () => {
+export function AuthLayout() {
   const { isLoading } = useAuth0();
 
   return isLoading ? (
@@ -11,4 +11,4 @@ export const AuthLayout = () => {
       <Outlet />
     </div>
   );
-};
+}

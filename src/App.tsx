@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
-import Tasks from './pages/Tasks';
+import Board from './pages/Board';
 import Settings from './pages/Settings';
 import { DashboardLayout } from './DashboardLayout';
 import { AuthLayout } from './AuthLayout';
@@ -22,7 +22,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Home />}></Route>
           <Route path="callback" element={<Callback />} />
-          <Route path="tasks" element={<Tasks />}></Route>
+          <Route path="board" element={<Board />}></Route>
           <Route path="settings" element={<Settings />} />
           <Route path="*" element={<Navigate to="" />} />
         </Route>

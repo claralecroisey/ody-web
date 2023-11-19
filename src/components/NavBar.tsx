@@ -45,10 +45,10 @@ export default function NavBar() {
             </li>
             <li>
               <NavbarLink
-                path="/dashboard/tasks"
+                path="/dashboard/board"
                 IconComponent={Squares2X2Icon}
               >
-                Tasks
+                Board
               </NavbarLink>
             </li>
           </ul>
