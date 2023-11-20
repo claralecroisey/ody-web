@@ -2,9 +2,9 @@ import { Field, Formik } from 'formik';
 import { EditableContent } from '../components/form/EditableContent';
 import * as Yup from 'yup';
 import {
-  CreateJobListingData,
-  useCreateJobListingMutation,
-} from '../queries/useCreateJobListing';
+  CreateJobApplicationData,
+  useCreateJobApplicationMutation,
+} from '../queries/useCreateJobApplication';
 import { toSnakeCase } from '../utils/helpers';
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -18,11 +18,13 @@ const AddJobSchema = Yup.object().shape({
 
 export function AddJob() {
   const { getAccessTokenSilently } = useAuth0();
-  const { mutate: createJobListing } = useCreateJobListingMutation();
+  const { mutate: createJobApplication } = useCreateJobApplicationMutation();
 
   return (
     <div className="container flex h-full flex-col">
-      <h1 className="mb-12 text-2xl font-semibold">Add a new Job listing</h1>
+      <h1 className="mb-12 text-2xl font-semibold">
+        Add a new Job Application
+      </h1>
       <Formik
         initialValues={{
           title: '',
@@ -42,8 +44,8 @@ export function AddJob() {
             },
           };
 
-          createJobListing({
-            data: toSnakeCase(values) as CreateJobListingData,
+          createJobApplication({
+            data: toSnakeCase(values) as CreateJobApplicationData,
             config,
           });
         }}
