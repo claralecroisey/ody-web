@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import apiClient from '../api';
 import { AxiosError } from 'axios';
+import { useGetAuthHeadersQuery } from './useGetAuthHeadersQuery';
 
 export type CreateJobApplicationData = {
   title: string;
@@ -19,17 +20,21 @@ const createJobApplication = async ({
   data,
   config,
 }: CreateJobApplicationQueryParams): Promise<void> => {
-  return apiClient
-    .post('/job-applications', data, config)
-    .then(res => res.data);
+  return apiClient.post('/job-applications', data, config);
 };
 
 export const useCreateJobApplicationMutation = () => {
+  const config = useGetAuthHeadersQuery();
+
   return useMutation<
     void,
     AxiosError<{ message: string }>,
-    CreateJobApplicationQueryParams
+    CreateJobApplicationData
   >({
-    mutationFn: createJobApplication,
+    mutationFn: (data: CreateJobApplicationData) =>
+      createJobApplication({
+        data,
+        config,
+      }),
   });
 };

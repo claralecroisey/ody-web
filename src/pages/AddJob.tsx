@@ -6,19 +6,18 @@ import {
   useCreateJobApplicationMutation,
 } from '../queries/useCreateJobApplication';
 import { toSnakeCase } from '../utils/helpers';
-import { useAuth0 } from '@auth0/auth0-react';
 
 const AddJobSchema = Yup.object().shape({
   title: Yup.string().required('Required'),
   role: Yup.string().required('Required'),
   companyName: Yup.string().required('Required'),
   description: Yup.string().required('Required'),
-  url: Yup.string().required('Required'),
+  url: Yup.string().url().required('Required'),
 });
 
 export function AddJob() {
-  const { getAccessTokenSilently } = useAuth0();
-  const { mutate: createJobApplication } = useCreateJobApplicationMutation();
+  const { mutateAsync: createJobApplication } =
+    useCreateJobApplicationMutation();
 
   return (
     <div className="container flex h-full flex-col">
@@ -34,20 +33,17 @@ export function AddJob() {
           url: '',
         }}
         validationSchema={AddJobSchema}
-        onSubmit={async values => {
-          // TODO: move this in a separate logic
-          const token = await getAccessTokenSilently();
-          const config = {
-            headers: {
-              'content-type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          };
-
-          createJobApplication({
-            data: toSnakeCase(values) as CreateJobApplicationData,
-            config,
-          });
+        onSubmit={async (values, { setSubmitting }) => {
+          try {
+            setSubmitting(true);
+            await createJobApplication(
+              toSnakeCase(values) as CreateJobApplicationData,
+            );
+          } catch (error) {
+            // TODO: Handle error
+          } finally {
+            setSubmitting(false);
+          }
         }}
       >
         {({
