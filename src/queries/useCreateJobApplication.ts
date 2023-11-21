@@ -24,17 +24,22 @@ const createJobApplication = async ({
 };
 
 export const useCreateJobApplicationMutation = () => {
-  const config = useGetAuthHeadersQuery();
+  const { data: config } = useGetAuthHeadersQuery();
 
   return useMutation<
     void,
     AxiosError<{ message: string }>,
     CreateJobApplicationData
   >({
-    mutationFn: (data: CreateJobApplicationData) =>
-      createJobApplication({
-        data,
-        config,
-      }),
+    mutationFn: (data: CreateJobApplicationData) => {
+      if (config) {
+        return createJobApplication({
+          data,
+          config,
+        });
+      } else {
+        return Promise.reject({ message: 'No auth loaded' });
+      }
+    },
   });
 };

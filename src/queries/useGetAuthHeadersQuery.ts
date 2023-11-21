@@ -16,14 +16,19 @@ const useGetAccessTokenQuery = () => {
 };
 
 export const useGetAuthHeadersQuery = () => {
-  const { data: token } = useGetAccessTokenQuery();
+  const { data: token, ...properties } = useGetAccessTokenQuery();
 
-  const config = {
-    headers: {
-      'content-type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
+  const config = token
+    ? {
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    : undefined;
+
+  return {
+    data: config,
+    ...properties,
   };
-
-  return config;
 };
