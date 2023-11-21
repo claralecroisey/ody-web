@@ -6,6 +6,7 @@ import {
   useCreateJobApplicationMutation,
 } from '../queries/useCreateJobApplication';
 import { toSnakeCase } from '../utils/helpers';
+import { NavLink } from 'react-router-dom';
 
 const AddJobSchema = Yup.object().shape({
   title: Yup.string().required('Required'),
@@ -21,7 +22,15 @@ export function AddJob() {
 
   return (
     <div className="container flex h-full flex-col">
-      <h1 className="mb-12 text-2xl font-semibold">
+      <div className="breadcrumbs text-sm">
+        <ul>
+          <li>
+            <NavLink to="..">Board</NavLink>
+          </li>
+          <li>New</li>
+        </ul>
+      </div>
+      <h1 className="mb-12 mt-4 text-2xl font-semibold">
         Add a new Job Application
       </h1>
       <Formik
