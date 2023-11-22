@@ -5,7 +5,9 @@ import {
   JobApplicationData,
   JobApplicationStatus,
 } from '../types/JobApplication';
-import { ReactNode } from 'react';
+import { ReactNode, useCallback, useRef, useState } from 'react';
+import { Modal, ModalBody, ModalHeader } from '../components/ui/Modal';
+import { LoadingScreen } from '../components/ui/Loader';
 
 const COLUMNS: {
   key: string;
@@ -48,10 +50,10 @@ const COLUMNS: {
 function JobCard({ job }: { job: JobApplicationData }) {
   return (
     <div
-      className="h-24 w-full rounded-sm bg-base-100 px-4 py-2 shadow-sm"
+      className="h-24 w-full rounded-md bg-base-100 px-4 py-2 shadow-sm transition-all hover:shadow-xl"
       key={job.id}
     >
-      <h1 className="text-lg">{job.title}</h1>
+      <h1 className="text-lg font-medium">{job.title}</h1>
       <span className="text-sm">{job.companyName}</span>
     </div>
   );
@@ -59,18 +61,33 @@ function JobCard({ job }: { job: JobApplicationData }) {
 
 function Column({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="h-full w-[300px] rounded-md bg-indigo-100 p-4">
+    <div className="flex h-full w-[300px] flex-col rounded-md bg-indigo-100 p-4">
       <div className="mb-6 p-2 text-center font-medium uppercase text-gray-600">
         {title}
       </div>
-      <div className="flex-1 space-y-4 overflow-auto">{children}</div>
+      <div className="relative flex-1 overflow-auto">
+        <div className="space-y-4">{children}</div>
+      </div>
     </div>
   );
 }
 
 export default function Board() {
   const navigate = useNavigate();
+  const ref = useRef<HTMLDialogElement>(null);
+
   const { data: jobApplications, isLoading } = useGetJobApplicationsQuery();
+  const [selectedJob, setSelectedJob] = useState<JobApplicationData | null>(
+    null,
+  );
+
+  const displayApplicationContent = useCallback(
+    (jobApplication: JobApplicationData) => {
+      setSelectedJob(jobApplication);
+      ref.current?.showModal();
+    },
+    [ref],
+  );
 
   const jobApplicationsByColumn: { [key: string]: JobApplicationData[] } =
     COLUMNS.reduce(
@@ -84,11 +101,13 @@ export default function Board() {
     );
 
   return (
-    <div className="container flex h-full flex-col">
+    <>
       {isLoading ? (
-        <div>Loading...</div>
+        <div className="container flex h-full items-center justify-center">
+          <LoadingScreen />
+        </div>
       ) : (
-        <>
+        <div className="container flex h-full flex-col">
           <div className="mb-8 flex justify-between">
             <h1 className="mb-12 text-xl"></h1>
             <button
@@ -104,14 +123,29 @@ export default function Board() {
               {COLUMNS.map(column => (
                 <Column key={column.key} title={column.label}>
                   {jobApplicationsByColumn[column.key].map(job => (
-                    <JobCard key={job.id} job={job} />
+                    <button
+                      key={job.id}
+                      className="w-full focus-visible:outline-none"
+                      onClick={() => displayApplicationContent(job)}
+                    >
+                      <JobCard key={job.id} job={job} />
+                    </button>
                   ))}
                 </Column>
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
-    </div>
+      <Modal ref={ref}>
+        <ModalHeader>
+          <h1 className="text-2xl font-medium">{selectedJob?.title}</h1>
+          <span>{selectedJob?.companyName}</span>
+        </ModalHeader>
+        <ModalBody>
+          <div className="h-48 overflow-auto">{selectedJob?.description}</div>
+        </ModalBody>
+      </Modal>
+    </>
   );
 }
