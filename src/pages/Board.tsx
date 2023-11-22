@@ -159,7 +159,6 @@ function JobApplicationModalContent({
     <Formik
       initialValues={{
         title,
-        companyName,
         description,
       }}
       onSubmit={async (values, { setSubmitting }) => {
@@ -197,15 +196,7 @@ function JobApplicationModalContent({
                     onBlur={handleBlur}
                   />
                   <br />
-                  <input
-                    type="text"
-                    placeholder="Company Name"
-                    className="input input-bordered input-sm w-full max-w-xs"
-                    name="companyName"
-                    value={values.companyName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
+                  <span>{companyName}</span>
                 </div>
               </ModalHeader>
               <ModalBody>
@@ -222,8 +213,8 @@ function JobApplicationModalContent({
                 Edit
               </button>
               <ModalHeader>
-                <h1 className="text-2xl font-medium">{title}</h1>
-                <span>{values.companyName}</span>
+                <h1 className="text-2xl font-medium">{values.title}</h1>
+                <span>{companyName}</span>
               </ModalHeader>
               <ModalBody>
                 <div className="h-48 overflow-x-auto border-b-2 border-solid border-gray-100 p-2">
