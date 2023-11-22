@@ -8,6 +8,8 @@ import {
 import { ReactNode, useCallback, useRef, useState } from 'react';
 import { Modal, ModalBody, ModalHeader } from '../components/ui/Modal';
 import { LoadingScreen } from '../components/ui/Loader';
+import { EditableContent } from '../components/form/EditableContent';
+import { Formik } from 'formik';
 
 const COLUMNS: {
   key: string;
@@ -138,14 +140,100 @@ export default function Board() {
         </div>
       )}
       <Modal ref={ref}>
-        <ModalHeader>
-          <h1 className="text-2xl font-medium">{selectedJob?.title}</h1>
-          <span>{selectedJob?.companyName}</span>
-        </ModalHeader>
-        <ModalBody>
-          <div className="h-48 overflow-auto">{selectedJob?.description}</div>
-        </ModalBody>
+        {selectedJob ? (
+          <JobApplicationModalContent key={selectedJob.id} job={selectedJob} />
+        ) : null}
       </Modal>
     </>
+  );
+}
+
+function JobApplicationModalContent({
+  job: { title, companyName, description },
+}: {
+  job: JobApplicationData;
+}) {
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  return (
+    <Formik
+      initialValues={{
+        title,
+        companyName,
+        description,
+      }}
+      onSubmit={async (values, { setSubmitting }) => {
+        try {
+          setSubmitting(true);
+          // TODO: Call endpoint
+        } catch (error) {
+          // TODO: Handle error
+        } finally {
+          setSubmitting(false);
+        }
+      }}
+    >
+      {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+        <form className="flex flex-col" onSubmit={handleSubmit}>
+          {isEditMode ? (
+            <>
+              <button
+                className="place-self-end"
+                onClick={() => setIsEditMode(false)}
+                disabled={isSubmitting}
+                type="submit"
+              >
+                Save
+              </button>
+              <ModalHeader>
+                <div className="space-y-2">
+                  <input
+                    type="text"
+                    placeholder="Title"
+                    className="input input-bordered w-full max-w-xs text-2xl font-medium"
+                    name="title"
+                    value={values.title}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  <br />
+                  <input
+                    type="text"
+                    placeholder="Company Name"
+                    className="input input-bordered input-sm w-full max-w-xs"
+                    name="companyName"
+                    value={values.companyName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </div>
+              </ModalHeader>
+              <ModalBody>
+                <EditableContent name="description" />
+              </ModalBody>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="place-self-end"
+                onClick={() => setIsEditMode(true)}
+              >
+                Edit
+              </button>
+              <ModalHeader>
+                <h1 className="text-2xl font-medium">{title}</h1>
+                <span>{values.companyName}</span>
+              </ModalHeader>
+              <ModalBody>
+                <div className="h-48 overflow-x-auto border-b-2 border-solid border-gray-100 p-2">
+                  {values.description}
+                </div>
+              </ModalBody>
+            </>
+          )}
+        </form>
+      )}
+    </Formik>
   );
 }

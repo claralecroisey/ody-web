@@ -1,7 +1,10 @@
 import { ForwardedRef, ReactNode, forwardRef } from 'react';
 
 export const ModalHeader = ({ children }: { children: ReactNode }) => (
-  <div className="pb-6">{children}</div>
+  <>
+    <div>{children}</div>
+    <div className="divider"></div>
+  </>
 );
 
 export const ModalBody = ({ children }: { children: ReactNode }) => (
@@ -15,7 +18,9 @@ export const Modal = forwardRef(function (
   return (
     <dialog ref={ref} className="modal">
       <div className="modal-box flex h-4/5 w-11/12 max-w-screen-md flex-col justify-between">
-        <div id="modal-content">{children}</div>
+        <div id="modal-content" className="flex flex-col">
+          {children}
+        </div>
         <div className="modal-action">
           <form method="dialog">
             <div className="flex items-center justify-end space-x-10">
