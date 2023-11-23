@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import apiClient from '../api';
 import { AxiosError } from 'axios';
 import { useGetAuthHeadersQuery } from './useGetAuthHeadersQuery';
@@ -24,6 +24,7 @@ const createJobApplication = async ({
 };
 
 export const useCreateJobApplicationMutation = () => {
+  const queryClient = useQueryClient();
   const { data: config } = useGetAuthHeadersQuery();
 
   return useMutation<
@@ -41,5 +42,7 @@ export const useCreateJobApplicationMutation = () => {
         return Promise.reject({ message: 'No auth loaded' });
       }
     },
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['jobApplications'] }),
   });
 };

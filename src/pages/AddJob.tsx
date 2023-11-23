@@ -6,7 +6,7 @@ import {
   useCreateJobApplicationMutation,
 } from '../queries/useCreateJobApplication';
 import { toSnakeCase } from '../utils/helpers';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const AddJobSchema = Yup.object().shape({
   title: Yup.string().required('Required'),
@@ -17,6 +17,7 @@ const AddJobSchema = Yup.object().shape({
 });
 
 export function AddJob() {
+  const navigate = useNavigate();
   const { mutateAsync: createJobApplication } =
     useCreateJobApplicationMutation();
 
@@ -48,6 +49,7 @@ export function AddJob() {
             await createJobApplication(
               toSnakeCase(values) as CreateJobApplicationData,
             );
+            navigate('/dashboard/board');
           } catch (error) {
             // TODO: Handle error
           } finally {
