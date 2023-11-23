@@ -2,6 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Stats } from '../components/Stats';
 import { useGetJobApplicationsQuery } from '../queries/useGetJobApplicationsQuery';
 import { Loader } from '../components/ui/Loader';
+import { JobApplicationData } from '../types/JobApplication';
 
 export default function Home() {
   const { user } = useAuth0();
@@ -17,7 +18,7 @@ export default function Home() {
           <Loader />
         </div>
       ) : (
-        <Stats jobApplications={jobApplications} />
+        <Stats jobApplications={jobApplications as JobApplicationData[]} />
       )}
     </div>
   );

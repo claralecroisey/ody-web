@@ -108,7 +108,7 @@ export function JobApplicationModalContent({
                 <ModalHeader>
                   <div className="flex justify-between align-bottom">
                     <h1 className="text-2xl font-medium">{values.title}</h1>
-                    <Tag color="gray">
+                    <Tag color="secondary">
                       {JobApplicationStatuses[values.status]}
                     </Tag>
                   </div>
