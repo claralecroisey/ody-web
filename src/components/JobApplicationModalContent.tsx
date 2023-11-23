@@ -1,14 +1,16 @@
 import { useRef, useState } from 'react';
 import { useUpdateJobApplicationMutation } from '../queries/useUpdateJobApplicationMutation';
 import { JobApplicationData } from '../types/JobApplication';
-import { Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import { Modal, ModalActions, ModalBody, ModalHeader } from './ui/Modal';
 import { EditableContent } from './form/EditableContent';
 import { useDeleteJobApplicationMutation } from '../queries/useDeleteJobApplicationMutation';
 import { UUID } from 'crypto';
+import Tag from './ui/Tag';
+import { JobApplicationStatuses } from '../consts/jobApplication';
 
 export function JobApplicationModalContent({
-  job: { id, title, companyName, description },
+  job: { id, title, companyName, description, status },
   onDelete,
 }: {
   job: JobApplicationData;
@@ -37,6 +39,7 @@ export function JobApplicationModalContent({
         initialValues={{
           title,
           description,
+          status,
         }}
         onSubmit={async (values, { setSubmitting }) => {
           try {
@@ -54,21 +57,35 @@ export function JobApplicationModalContent({
           <form className="flex flex-col" onSubmit={handleSubmit}>
             {isEditMode ? (
               <>
-                <button className="place-self-end" type="submit">
+                <button className="mb-2 place-self-end" type="submit">
                   Save
                 </button>
                 <ModalHeader>
-                  <div className="space-y-2">
-                    <input
-                      type="text"
-                      placeholder="Title"
-                      className="input input-bordered w-full max-w-xs text-2xl font-medium"
-                      name="title"
-                      value={values.title}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <br />
+                  <div className="space-y-4">
+                    <div className="flex justify-between align-bottom">
+                      <input
+                        type="text"
+                        placeholder="Title"
+                        className="input input-bordered w-full max-w-xs text-2xl font-medium"
+                        name="title"
+                        value={values.title}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <Field
+                        as="select"
+                        name="status"
+                        className="select select-bordered select-sm self-start"
+                      >
+                        {Object.entries(JobApplicationStatuses).map(
+                          ([enumValue, strValue]) => (
+                            <option key={enumValue} value={enumValue}>
+                              {strValue}
+                            </option>
+                          ),
+                        )}
+                      </Field>
+                    </div>
                     <span>{companyName}</span>
                   </div>
                 </ModalHeader>
@@ -80,7 +97,7 @@ export function JobApplicationModalContent({
               <>
                 <button
                   type="button"
-                  className="place-self-end"
+                  className="mb-4 place-self-end"
                   onClick={e => {
                     e.preventDefault();
                     setIsEditMode(true);
@@ -89,7 +106,12 @@ export function JobApplicationModalContent({
                   Edit
                 </button>
                 <ModalHeader>
-                  <h1 className="text-2xl font-medium">{values.title}</h1>
+                  <div className="flex justify-between align-bottom">
+                    <h1 className="text-2xl font-medium">{values.title}</h1>
+                    <Tag color="gray">
+                      {JobApplicationStatuses[values.status]}
+                    </Tag>
+                  </div>
                   <span>{companyName}</span>
                 </ModalHeader>
                 <ModalBody>

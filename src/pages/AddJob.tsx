@@ -3,6 +3,8 @@ import { EditableContent } from '../components/form/EditableContent';
 import * as Yup from 'yup';
 import { useCreateJobApplicationMutation } from '../queries/useCreateJobApplication';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { JobApplicationStatus } from '../types/JobApplication';
+import { JobApplicationStatuses } from '../consts/jobApplication';
 
 const AddJobSchema = Yup.object().shape({
   title: Yup.string().required('Required'),
@@ -37,6 +39,7 @@ export function AddJob() {
           companyName: '',
           description: '',
           url: '',
+          status: JobApplicationStatus.Saved,
         }}
         validationSchema={AddJobSchema}
         onSubmit={async (values, { setSubmitting }) => {
@@ -128,6 +131,21 @@ export function AddJob() {
               <span className="text-sm text-error">
                 {errors.url && touched.url && errors.url}
               </span>
+
+              <label htmlFor="status">Status</label>
+              <Field
+                as="select"
+                name="status"
+                className="select select-bordered"
+              >
+                {Object.entries(JobApplicationStatuses).map(
+                  ([enumValue, strValue]) => (
+                    <option key={enumValue} value={enumValue}>
+                      {strValue}
+                    </option>
+                  ),
+                )}
+              </Field>
 
               <button
                 type="submit"

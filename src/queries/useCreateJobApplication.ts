@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import apiClient from '../api';
 import { AxiosError } from 'axios';
 import { useGetAuthHeadersQuery } from './useGetAuthHeadersQuery';
+import { JobApplicationStatus } from '../types/JobApplication';
 
 export type CreateJobApplicationData = {
   title: string;
@@ -9,6 +10,7 @@ export type CreateJobApplicationData = {
   companyName: string;
   description: string;
   url: string;
+  status: JobApplicationStatus;
 };
 
 export type CreateJobApplicationQueryParams = {
