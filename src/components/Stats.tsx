@@ -26,20 +26,26 @@ export function Stats({ jobApplications }: StatsProps) {
     <div className="stats shadow">
       <div className="stat place-items-center">
         <div className="stat-title">Applied</div>
-        <div className="stat-value">{appliedJobsCount}</div>
+        <div className="stat-value" data-testid="applied-jobs-count">
+          {appliedJobsCount}
+        </div>
         {/* TODO: Add real date range */}
         <div className="stat-desc">Jan 1st - Feb 1st</div>{' '}
       </div>
 
       <div className="stat place-items-center">
         <div className="stat-title">Currently In Process</div>
-        <div className="stat-value">{inProcessJobsCount}</div>
+        <div className="stat-value" data-testid="in-process-jobs-count">
+          {inProcessJobsCount}
+        </div>
         <div className="stat-desc">↘︎ 90 (14%)</div>
       </div>
 
       <div className="stat place-items-center">
         <div className="stat-title">Offers received</div>
-        <div className="stat-value">{offerReceivedCount}</div>
+        <div className="stat-value" data-testid="offers-received-count">
+          {offerReceivedCount}
+        </div>
         <div className="stat-desc">↗︎ 400 (22%)</div>
       </div>
     </div>
