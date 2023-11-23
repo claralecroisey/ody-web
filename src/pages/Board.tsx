@@ -138,7 +138,7 @@ export default function Board() {
           </div>
         </div>
       )}
-      <Modal ref={ref} actions={<button className="btn">Close</button>}>
+      <Modal ref={ref}>
         {selectedJob ? (
           <JobApplicationModalContent
             key={selectedJob.id}

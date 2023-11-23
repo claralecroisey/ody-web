@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useUpdateJobApplicationMutation } from '../queries/useUpdateJobApplicationMutation';
 import { JobApplicationData } from '../types/JobApplication';
 import { Formik } from 'formik';
-import { Modal, ModalBody, ModalHeader } from './ui/Modal';
+import { Modal, ModalActions, ModalBody, ModalHeader } from './ui/Modal';
 import { EditableContent } from './form/EditableContent';
 import { useDeleteJobApplicationMutation } from '../queries/useDeleteJobApplicationMutation';
 import { UUID } from 'crypto';
@@ -102,33 +102,34 @@ export function JobApplicationModalContent({
           </form>
         )}
       </Formik>
-      <div className="flex-1"></div>
-      <a
-        className="link-error link flex items-center self-center text-sm"
-        onClick={() => deleteModalRef.current?.showModal()}
-      >
-        Delete this job application
-      </a>
-      <Modal
-        size="sm"
-        ref={deleteModalRef}
-        actions={
-          <>
-            <button
-              onClick={e => handleDelete(e, id)}
-              className="btn btn-error btn-sm"
-            >
-              Yes, delete
-            </button>
-            <button className="btn btn-sm">Cancel</button>
-          </>
-        }
-      >
+      <ModalActions>
+        <div className="flex flex-col items-center space-y-2">
+          <a
+            className="link-error link flex items-center self-center text-sm"
+            onClick={() => deleteModalRef.current?.showModal()}
+          >
+            Delete this job application
+          </a>
+          <button className="btn btn-sm">Close</button>
+        </div>
+      </ModalActions>
+
+      {/* Delete Job application Modal */}
+      <Modal size="sm" ref={deleteModalRef}>
         <ModalBody>
           <span className="text-xl">
             Are you sure you want to delete this job application?
           </span>
         </ModalBody>
+        <ModalActions>
+          <button
+            onClick={e => handleDelete(e, id)}
+            className="btn btn-error btn-sm"
+          >
+            Yes, delete
+          </button>
+          <button className="btn btn-sm">Cancel</button>
+        </ModalActions>
       </Modal>
     </>
   );
