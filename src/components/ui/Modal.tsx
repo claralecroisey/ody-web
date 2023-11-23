@@ -12,20 +12,25 @@ export const ModalBody = ({ children }: { children: ReactNode }) => (
 );
 
 export const Modal = forwardRef(function (
-  { children }: { children: ReactNode },
+  {
+    size = 'lg',
+    actions,
+    children,
+  }: { size?: 'sm' | 'lg'; actions: ReactNode; children: ReactNode },
   ref: ForwardedRef<HTMLDialogElement> | null,
 ) {
+  const sizeClasses = size === 'sm' ? 'w-1/2' : 'h-4/5 w-11/12 max-w-screen-md';
   return (
     <dialog ref={ref} className="modal">
-      <div className="modal-box flex h-4/5 w-11/12 max-w-screen-md flex-col justify-between">
-        <div id="modal-content" className="flex flex-col">
+      <div className={`modal-box flex ${sizeClasses} flex-col justify-between`}>
+        <div id="modal-content" className="flex flex-1 flex-col">
           {children}
         </div>
-        <div className="modal-action">
+        <div className="modal-action mt-2">
           <form method="dialog">
             <div className="flex items-center justify-end space-x-10">
               {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
+              {actions}
             </div>
           </form>
         </div>

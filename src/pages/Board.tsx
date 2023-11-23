@@ -138,9 +138,13 @@ export default function Board() {
           </div>
         </div>
       )}
-      <Modal ref={ref}>
+      <Modal ref={ref} actions={<button className="btn">Close</button>}>
         {selectedJob ? (
-          <JobApplicationModalContent key={selectedJob.id} job={selectedJob} />
+          <JobApplicationModalContent
+            key={selectedJob.id}
+            job={selectedJob}
+            onDelete={() => ref.current?.close()}
+          />
         ) : null}
       </Modal>
     </>

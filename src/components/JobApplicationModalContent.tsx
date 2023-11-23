@@ -1,17 +1,35 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useUpdateJobApplicationMutation } from '../queries/useUpdateJobApplicationMutation';
 import { JobApplicationData } from '../types/JobApplication';
 import { Formik } from 'formik';
-import { ModalBody, ModalHeader } from './ui/Modal';
+import { Modal, ModalBody, ModalHeader } from './ui/Modal';
 import { EditableContent } from './form/EditableContent';
+import { useDeleteJobApplicationMutation } from '../queries/useDeleteJobApplicationMutation';
+import { UUID } from 'crypto';
 
 export function JobApplicationModalContent({
   job: { id, title, companyName, description },
+  onDelete,
 }: {
   job: JobApplicationData;
+  onDelete: () => void;
 }) {
+  const deleteModalRef = useRef<HTMLDialogElement>(null);
   const { mutateAsync: updateJob } = useUpdateJobApplicationMutation();
+  const { mutateAsync: deleteJob } = useDeleteJobApplicationMutation();
   const [isEditMode, setIsEditMode] = useState(false);
+
+  async function handleDelete(
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    id: UUID,
+  ) {
+    e.preventDefault();
+    await deleteJob(id);
+
+    // Close stacked modals
+    deleteModalRef.current?.close();
+    onDelete();
+  }
 
   return (
     <>
@@ -84,6 +102,34 @@ export function JobApplicationModalContent({
           </form>
         )}
       </Formik>
+      <div className="flex-1"></div>
+      <a
+        className="link-error link flex items-center self-center text-sm"
+        onClick={() => deleteModalRef.current?.showModal()}
+      >
+        Delete this job application
+      </a>
+      <Modal
+        size="sm"
+        ref={deleteModalRef}
+        actions={
+          <>
+            <button
+              onClick={e => handleDelete(e, id)}
+              className="btn btn-error btn-sm"
+            >
+              Yes, delete
+            </button>
+            <button className="btn btn-sm">Cancel</button>
+          </>
+        }
+      >
+        <ModalBody>
+          <span className="text-xl">
+            Are you sure you want to delete this job application?
+          </span>
+        </ModalBody>
+      </Modal>
     </>
   );
 }
