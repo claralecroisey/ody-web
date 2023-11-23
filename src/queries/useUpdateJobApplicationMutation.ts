@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import apiClient from '../api';
 import { AxiosError } from 'axios';
 import { useGetAuthHeadersQuery } from './useGetAuthHeadersQuery';
-import { toSnakeCase } from '../utils/helpers';
 import { UUID } from 'crypto';
 
 export type UpdateJobApplicationData = {
@@ -21,7 +20,7 @@ const updateJobApplication = async ({
   data,
   config,
 }: UpdateJobApplicationQueryParams): Promise<void> => {
-  return apiClient.put(`/job-applications/${id}`, toSnakeCase(data), config);
+  return apiClient.put(`/job-applications/${id}`, data, config);
 };
 
 export const useUpdateJobApplicationMutation = () => {

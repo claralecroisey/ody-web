@@ -1,11 +1,7 @@
 import { Field, Formik } from 'formik';
 import { EditableContent } from '../components/form/EditableContent';
 import * as Yup from 'yup';
-import {
-  CreateJobApplicationData,
-  useCreateJobApplicationMutation,
-} from '../queries/useCreateJobApplication';
-import { toSnakeCase } from '../utils/helpers';
+import { useCreateJobApplicationMutation } from '../queries/useCreateJobApplication';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 const AddJobSchema = Yup.object().shape({
@@ -46,9 +42,7 @@ export function AddJob() {
         onSubmit={async (values, { setSubmitting }) => {
           try {
             setSubmitting(true);
-            await createJobApplication(
-              toSnakeCase(values) as CreateJobApplicationData,
-            );
+            await createJobApplication(values);
             navigate('/dashboard/board');
           } catch (error) {
             // TODO: Handle error

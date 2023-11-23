@@ -6,7 +6,7 @@ import { useGetAuthHeadersQuery } from './useGetAuthHeadersQuery';
 export type CreateJobApplicationData = {
   title: string;
   role: string;
-  company_name: string;
+  companyName: string;
   description: string;
   url: string;
 };
