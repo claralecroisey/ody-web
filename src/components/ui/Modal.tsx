@@ -8,7 +8,7 @@ export const ModalHeader = ({ children }: { children: ReactNode }) => (
 );
 
 export const ModalBody = ({ children }: { children: ReactNode }) => (
-  <p className="py-4">{children}</p>
+  <div className="py-4">{children}</div>
 );
 
 export const Modal = forwardRef(function (

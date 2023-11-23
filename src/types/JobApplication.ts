@@ -1,3 +1,5 @@
+import { UUID } from 'crypto';
+
 export enum JobApplicationStatus {
   Saved = 'saved',
   Applied = 'applied',
@@ -11,7 +13,7 @@ export enum JobApplicationStatus {
 }
 
 export interface JobApplicationData {
-  id: number;
+  id: UUID;
   title: string;
   role: string;
   companyName: string;
