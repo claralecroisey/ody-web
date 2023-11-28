@@ -77,7 +77,7 @@ export default function Board() {
   const navigate = useNavigate();
   const ref = useRef<HTMLDialogElement>(null);
 
-  const { data: jobApplications, isLoading } = useGetJobApplicationsQuery();
+  const { data: jobApplications, isPending } = useGetJobApplicationsQuery();
   const [selectedJob, setSelectedJob] = useState<JobApplicationData | null>(
     null,
   );
@@ -103,7 +103,7 @@ export default function Board() {
 
   return (
     <>
-      {isLoading ? (
+      {isPending ? (
         <div className="container flex h-full items-center justify-center">
           <LoadingScreen />
         </div>
