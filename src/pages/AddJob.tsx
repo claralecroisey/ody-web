@@ -5,6 +5,7 @@ import { useCreateJobApplicationMutation } from '../queries/useCreateJobApplicat
 import { NavLink, useNavigate } from 'react-router-dom';
 import { JobApplicationStatus } from '../types/JobApplication';
 import { JobApplicationStatuses } from '../consts/jobApplication';
+import { useState } from 'react';
 
 const AddJobSchema = Yup.object().shape({
   title: Yup.string().required('Required'),
@@ -18,6 +19,7 @@ export function AddJob() {
   const navigate = useNavigate();
   const { mutateAsync: createJobApplication } =
     useCreateJobApplicationMutation();
+  const [hasError, setHasError] = useState(false);
 
   return (
     <div className="container flex h-full flex-col">
@@ -48,7 +50,7 @@ export function AddJob() {
             await createJobApplication(values);
             navigate('/dashboard/board');
           } catch (error) {
-            // TODO: Handle error
+            setHasError(true);
           } finally {
             setSubmitting(false);
           }
@@ -154,6 +156,12 @@ export function AddJob() {
               >
                 Add job
               </button>
+
+              {hasError && (
+                <span className="text-error">
+                  An error happend, please try again later.
+                </span>
+              )}
             </form>
           </div>
         )}
